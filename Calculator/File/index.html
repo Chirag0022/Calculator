@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  font-family: sans-serif;
+}
+
+.calculator {
+  width: 250px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+}
+
+.display {
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: right;
+  font-size: 18px;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+}
+
+button {
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #eee;
+}
+
+button:active {
+  background-color: #ddd;
+  border: 1px solid #999;
+}
+
+#equals {
+  background-color: #ffcc00;
+  color: #fff;
+}
+</style>
+</head>
+<body>
+
+<div class="calculator">
+  <div class="display" id="display">0</div>
+  <div class="buttons">
+    <button onclick="appendNumber('7')">7</button>
+    <button onclick="appendNumber('8')">8</button>
+    <button onclick="appendNumber('9')">9</button>
+    <button onclick="appendOperator('/')">/</button>
+    <button onclick="appendNumber('4')">4</button>
+    <button onclick="appendNumber('5')">5</button>
+    <button onclick="appendNumber('6')">6</button>
+    <button onclick="appendOperator('*')">*</button>
+    <button onclick="appendNumber('1')">1</button>
+    <button onclick="appendNumber('2')">2</button>
+    <button onclick="appendNumber('3')">3</button>
+    <button onclick="appendOperator('-')">-</button>
+    <button onclick="appendNumber('0')">0</button>
+    <button onclick="appendNumber('.')">.</button>
+    <button onclick="appendOperator('+')">+</button>
+    <button id="equals" onclick="calculate()">=</button>
+  </div>
+</div>
+
+<script>
+let display = document.getElementById('display');
+let previousOperator = null;
+let previousOperand = null;
+
+function appendNumber(number) {
+  if (display.textContent === '0') {
+    display.textContent = number;
+  } else {
+    display.textContent += number;
+  }
+}
+
+function appendOperator(operator) {
+  if (previousOperator) {
+    calculate();
+  }
+  previousOperator = operator;
+  previousOperand = parseFloat(display.textContent);
+  display.textContent += operator;
+}
+
+function calculate() {
+  let currentOperand = parseFloat(display.textContent.substring(display.textContent.lastIndexOf(previousOperator) + 1));
+  let result;
+  switch (previousOperator) {
+    case '+':
+      result = previousOperand + currentOperand;
+      break;
+    case '-':
+      result = previousOperand - currentOperand;
+      break;
+    case '*':
+      result = previousOperand * currentOperand;
+      break;
+    case '/':
+      if (currentOperand === 0) {
+        display.textContent = 'Error';
+        return;
+      }
+      result = previousOperand / currentOperand;
+      break;
+  }
+  display.textContent = result;
+  previousOperator = null;
+  previousOperand = null;
+}
+</script>
+
+</body>
+</html>
